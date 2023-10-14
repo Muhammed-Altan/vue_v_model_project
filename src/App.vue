@@ -1,3 +1,35 @@
+<script setup>
+import { ref } from "vue";
+// onUpdated, onMounted
+
+// components
+import CardComp from "./components/CardComp.vue";
+
+// State
+const products = ref();
+const newsletterNewUser = ref([]);
+const newsletterName = ref[""];
+const newsletterEmail = ref[""];
+
+// onMounted("Joakim har mounted mig");
+// onUpdated("Jeg er opdateret");
+
+fetch("https://mahauser2.github.io/productsDummyJson/products.json")
+  .then((res) => res.json())
+  .then((data) => (products.value = data));
+console.log(products);
+
+function signupFunction() {
+  alert("Din far");
+  newsletterNewUser.value.push({
+    newsletterName: username.value,
+    newsletterEmail: email.value,
+  });
+}
+
+console.log(newsletterNewUser);
+</script>
+
 <template>
   <!-- 1: Start out by fetching the products from https://mahauser2.github.io/productsDummyJson/products.json - store the fetched data in state  -->
 
@@ -28,43 +60,43 @@
 
   <div class="newsletter center">
     <p>Sign up for our newsletter here!</p>
-    <form>
+    <form @submit.prevent>
       <div>
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" placeholder="Username:" required />
+        <input
+          v-model="newsletterName"
+          type="text"
+          id="username"
+          name="username"
+          placeholder="Username:"
+          required
+        />
       </div>
       <div>
         <label for="email">email:</label>
-        <input type="email" id="email" name="email" placeholder="Email:" required />
+        <input
+          v-model="newsletterEmail"
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Email:"
+          required
+        />
       </div>
-      <button>Sign Up</button>
+      <button @click="signupFunction">Sign Up</button>
     </form>
   </div>
   <div class="product-wrapper center">
-    <div class="card">
-      <div class="product">
-        <div class="product-image">
-          <img src="https://raw.githubusercontent.com/mahaUser2/productsDummyJson/main/81fPKd-2AYL._AC_SL1500_.jpg" alt="Some bag" />
-        </div>
-        <div class="product-info">
-          <header>
-            <h3>Taske</h3>
-            <p class="price">2000000kr</p>
-            <p class="category">Taske</p>
-          </header>
-          <p class="description">Her er en taske</p>
-          <p class="stock">In stock: 300</p>
-        </div>
-      </div>
-    </div>
+    <!-- Her cards be -->
+    <CardComp
+      v-for="product in products"
+      :key="products.id"
+      :product="product"
+    ></CardComp>
   </div>
 </template>
 
-<script setup>
-// State
-</script>
-
-<style scoped>
+<style>
 .center {
   max-width: 1200px;
   margin: 0 auto;
